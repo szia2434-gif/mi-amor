@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Sorpresa 💌</title>
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    body{
+        height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        background:linear-gradient(135deg,#ff6b81,#ff9ff3);
+        overflow:hidden;
+    }
+
+    .container{
+        text-align:center;
+        color:white;
+        max-width:600px;
+        padding:20px;
+    }
+
+    h1{
+        font-size:2.5em;
+        margin-bottom:20px;
+    }
+
+    .mensaje{
+        font-size:1.3em;
+        min-height:120px;
+        line-height:1.6;
+    }
+
+    button{
+        margin-top:25px;
+        padding:12px 25px;
+        border:none;
+        border-radius:30px;
+        background:white;
+        color:#ff4d6d;
+        font-weight:bold;
+        cursor:pointer;
+        transition:0.3s;
+    }
+
+    button:hover{
+        transform:scale(1.1);
+    }
+
+    .corazon{
+        position:absolute;
+        color:white;
+        animation:flotar 6s linear infinite;
+        font-size:20px;
+    }
+
+    @keyframes flotar{
+        0%{
+            transform:translateY(0) scale(1);
+            opacity:1;
+        }
+        100%{
+            transform:translateY(-800px) scale(1.5);
+            opacity:0;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Para ti 💖</h1>
+    <div class="mensaje" id="texto"></div>
+    <button onclick="siguiente()">Descúbrelo 😏</button>
+</div>
+
+<script>
+const mensajes = [
+"Desde que llegaste... ya no quiero mirar a nadie más 😌",
+"Me gustas de una forma... que no pienso compartir con nadie ❤️",
+"Ven... que quiero perderme contigo y que nadie nos encuentre 🔥",
+"Lo admito... me encantas demasiado como para soltarte 💋",
+"Si te tengo cerca… no respondo 😏",
+"Quiero ser ese pensamiento que no puedes sacarte de la cabeza...",
+"Te voy a querer bonito… pero también intensito 😉",
+"Qué peligro… me estoy acostumbrando a ti 😈",
+"Si te abrazo… no te suelto, ya estás advertida 💕",
+"Eres mía en mis pensamientos… y pronto quiero más que eso..."
+];
+
+let index = 0;
+let escribiendo = false;
+
+function escribirTexto(texto){
+    const contenedor = document.getElementById("texto");
+    contenedor.innerHTML = "";
+    let i = 0;
+    escribiendo = true;
+
+    function escribir(){
+        if(i < texto.length){
+            contenedor.innerHTML += texto.charAt(i);
+            i++;
+            setTimeout(escribir, 40);
+        } else {
+            escribiendo = false;
+        }
+    }
+
+    escribir();
+}
+
+function siguiente(){
+    if(escribiendo) return;
+
+    escribirTexto(mensajes[index]);
+    index = (index + 1) % mensajes.length;
+}
+
+function crearCorazon(){
+    const corazon = document.createElement("div");
+    corazon.classList.add("corazon");
+    corazon.innerHTML = "❤";
+    corazon.style.left = Math.random()*100 + "vw";
+    corazon.style.fontSize = (Math.random()*20 + 10) + "px";
+    document.body.appendChild(corazon);
+
+    setTimeout(()=>{ corazon.remove(); },6000);
+}
+
+setInterval(crearCorazon,300);
+
+// iniciar primer mensaje
+escribirTexto(mensajes[0]);
+index = 1;
+</script>
+
+</body>
+</html>
