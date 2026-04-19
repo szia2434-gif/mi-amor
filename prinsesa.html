@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Solo tú...</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', sans-serif;
+}
+
+body{
+    height:100vh;
+    background:radial-gradient(circle at center, #140a14, #000);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    color:white;
+}
+
+/* latido suave */
+body::before{
+    content:"";
+    position:absolute;
+    width:200%;
+    height:200%;
+    background:radial-gradient(circle, rgba(255,0,90,0.06), transparent 60%);
+    animation:latido 5s infinite;
+}
+
+@keyframes latido{
+    0%{transform:scale(1); opacity:0.2;}
+    50%{transform:scale(1.15); opacity:0.5;}
+    100%{transform:scale(1); opacity:0.2;}
+}
+
+.container{
+    text-align:center;
+    max-width:700px;
+    padding:30px;
+    z-index:2;
+}
+
+.titulo{
+    font-size:2.6em;
+    margin-bottom:25px;
+    color:#ff2e63;
+    letter-spacing:2px;
+}
+
+.texto{
+    font-size:1.35em;
+    min-height:150px;
+    line-height:1.7;
+}
+
+.btn{
+    margin-top:30px;
+    padding:12px 35px;
+    border:none;
+    border-radius:30px;
+    background:#ff2e63;
+    color:white;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.btn:hover{
+    transform:scale(1.1);
+}
+
+/* brillo en palabras */
+.resaltar{
+    color:#ff4d6d;
+    font-weight:bold;
+    text-shadow:0 0 10px rgba(255,77,109,0.6);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="titulo">No es solo gusto...</div>
+    <div class="texto" id="texto"></div>
+    <button class="btn" onclick="siguiente()">Sigue... 😏</button>
+</div>
+
+<script>
+const frases = [
+'No sé en qué momento dejaste de ser "alguien"...',
+'y empezaste a ser <span class="resaltar">lo único en lo que pienso</span>...',
+'porque ahora estás en todo...',
+'en mi cabeza... en mi tiempo... en mis ganas...',
+'',
+'Y no... no voy a mentir...',
+'me tienes <span class="resaltar">demasiado metido en ti</span>...',
+'más de lo que debería...',
+'y no tengo intención de frenarlo...',
+'',
+'Cuando algo me importa...',
+'no lo tomo a la ligera...',
+'lo quiero cerca...',
+'lo cuido...',
+'y no dejo que cualquiera llegue...',
+'',
+'Y tú...',
+'<span class="resaltar">tú no eres para cualquiera</span>...',
+'',
+'Hay algo en ti...',
+'que me hace quererte...',
+'pero no suave...',
+'',
+'<span class="resaltar">intenso... constante... sin soltarte</span>...',
+'',
+'No es control...',
+'es que contigo...',
+'<span class="resaltar">no sé ser a medias</span>...',
+'',
+'Y si me dejas acercarme más...',
+'vas a sentirlo...',
+'',
+'porque cuando me quedo...',
+'<span class="resaltar">me quedo de verdad</span>...'
+];
+
+let i = 0;
+let escribiendo = false;
+
+function escribirHTML(html){
+    const cont = document.getElementById("texto");
+    cont.innerHTML = "";
+    escribiendo = true;
+
+    let temp = document.createElement("div");
+    temp.innerHTML = html;
+
+    let nodes = Array.from(temp.childNodes);
+    let index = 0;
+
+    function escribirNodo(){
+        if(index >= nodes.length){
+            escribiendo = false;
+            return;
+        }
+
+        let node = nodes[index];
+
+        if(node.nodeType === 3){ // texto
+            let texto = node.textContent;
+            let j = 0;
+            let span = document.createElement("span");
+            cont.appendChild(span);
+
+            function escribirTexto(){
+                if(j < texto.length){
+                    span.textContent += texto[j];
+                    j++;
+                    setTimeout(escribirTexto, 30);
+                } else {
+                    index++;
+                    escribirNodo();
+                }
+            }
+            escribirTexto();
+
+        } else {
+            cont.appendChild(node.cloneNode(true));
+            index++;
+            escribirNodo();
+        }
+    }
+
+    escribirNodo();
+}
+
+function siguiente(){
+    if(escribiendo) return;
+
+    escribirHTML(frases[i]);
+    i = (i + 1) % frases.length;
+}
+
+/* inicio */
+escribirHTML(frases[0]);
+i = 1;
+</script>
+
+</body>
+</html>
